@@ -1,0 +1,34 @@
+services:
+
+  redis-server:
+    image: redis:7.0.2
+    container_name: redis-server
+    ports:
+      - 6379:6379
+    volumes:
+      - redis-data:/data
+      - $PWD/redis.conf:/usr/local/etc/redis/redis.conf
+    healthcheck:
+      test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
+      interval: 1s
+      timeout: 3s
+      retries: 5
+
+  micro1:
+    image: ${DOCKER_REGISTRY-}micro1
+    build:
+      context: .
+      dockerfile: Micro1/Dockerfile
+
+  micro2:
+    image: ${DOCKER_REGISTRY-}micro2
+    build:
+      context: .
+      dockerfile: Micro2/Dockerfile
+
+volumes:
+  redis-data:
+
+configs:
+  redis_config:
+    external: true

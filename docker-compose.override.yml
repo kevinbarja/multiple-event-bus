@@ -1,0 +1,21 @@
+
+services:
+  micro1:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+    ports:
+      - "5101:80"
+    depends_on:
+      redis-server:
+        condition: service_healthy
+
+  micro2:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+    ports:
+      - "5102:80"
+    depends_on:
+      redis-server:
+        condition: service_healthy
